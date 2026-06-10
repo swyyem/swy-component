@@ -26,5 +26,16 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@vueuse/core": "^13.5.0",
+    "@element-plus/icons-vue": "^2.3.1",
+    "lodash-unified": "^1.0.3"
+  },
+  "devDependencies": {
+    "vue": "^3.5.34"
   }
 }
