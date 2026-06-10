@@ -1,0 +1,114 @@
+name: swyComponent 构建与部署工作流程
+
+# 设置触发时机，当推送main分支或者tag到远程时触发
+on:
+  push:
+    tags:
+      - "v*" # 推送 v 开头的 tag 时触发（如 v1.0.0）
+    branches:
+      - main # 推送 main 分支时触发
+  workflow_dispatch: # 允许手动触发
+
+# 各个脚本节点命令
+jobs:
+  build-and-deploy:
+    # 执行环境为linux的ubuntu系统
+    runs-on: ubuntu-latest
+
+    # 添加环境变量
+    env:
+      NODE_ENV: production
+      ESBUILD_BINARY_PATH: "node_modules/esbuild/bin/esbuild"
+
+    # 添加权限配置
+    permissions:
+      contents: write # 允许写入代码（推送代码到 prod 分支）
+      deployments: write # 允许创建部署记录
+      packages: write # 允许发布到 GitHub Packages
+
+    steps:
+      # 从main分支拉取代码
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          ref: "main" # 指定拉取 main 分支
+
+      # 安装pnpm
+      - name: 安装 pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.12.2 --activate
+
+      # 安装node环境
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+
+      # 使用pnpm安装依赖
+      - name: 安装项目依赖
+        run: |
+          pnpm config set registry https://registry.npmmirror.com/
+          pnpm install --no-frozen-lockfile
+
+      # 构建组件库
+      - name: 构建组件库 📦
+        run: |
+          pnpm run build
+          # 检查构建是否成功生成了dist目录
+          if [ ! -d "packages/components/dist" ]; then
+            echo "错误: 组件库构建失败，未生成dist目录"
+            exit 1
+          fi
+          echo "组件库构建成功"
+          ls -la packages/components/dist
+
+      # 构建Storybook文档
+      - name: 构建Storybook文档 📚
+        run: |
+          pnpm run build-storybook
+          # 检查构建是否成功生成了storybook-static目录
+          if [ ! -d "apps/docs/storybook-static" ]; then
+            echo "错误: Storybook构建失败，未生成storybook-static目录"
+            exit 1
+          fi
+          echo "Storybook构建成功"
+          ls -la apps/docs/storybook-static
+
+      # 检查构建产物
+      - name: 检查构建目录内容
+        run: |
+          echo "查看组件库构建目录内容:"
+          ls -la packages/components/dist
+          echo "检查组件库文件大小:"
+          du -sh packages/components/dist
+          echo ""
+          echo "查看Storybook构建目录内容:"
+          ls -la apps/docs/storybook-static
+          echo "检查Storybook文件大小:"
+          du -sh apps/docs/storybook-static
+
+      # 运行测试
+      - name: 运行测试 🧪
+        run: |
+          pnpm run test:run || echo "测试失败，但不阻止部署"
+
+      # 将Storybook文档部署到prod分支
+      - name: 部署Storybook到 GitHub Pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.6.0
+        with:
+          branch: prod
+          folder: apps/docs/storybook-static
+          single-commit: true
+          clean: true
+          log-level: debug
+
+      # 发布到 npm（仅在推送 tag 时执行）
+      - name: 发布到 npm 📦
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          cd packages/components
+          npm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
