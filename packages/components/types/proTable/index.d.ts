@@ -1,0 +1,11 @@
+import ProBaseTable from './baseTable.vue';
+import ProTable from './table.vue';
+import ProColumn from './proColumn.vue';
+import { ProTableCellProvide } from './variable';
+export type * from './table.types';
+export type * from './proTable.types';
+export { ProColumn };
+export { ProBaseTable };
+export { ProTableCellProvide };
+export declare const ProInternalAddPrefix = "pro_row_add_";
+export default ProTable;

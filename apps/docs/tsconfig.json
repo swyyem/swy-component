@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@swy/components": ["../../packages/components/src"],
+      "@swy/components/*": ["../../packages/components/src/*"]
+    }
+  },
+  "include": ["stories/**/*.ts", "stories/**/*.tsx", ".storybook/**/*.ts"],
+  "exclude": ["node_modules"]
+}

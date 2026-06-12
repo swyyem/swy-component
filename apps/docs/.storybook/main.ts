@@ -1,5 +1,6 @@
 import type { StorybookConfig } from '@storybook/vue3-vite'
 import vue from '@vitejs/plugin-vue'
+import { resolve } from 'node:path'
 
 const config: StorybookConfig = {
   stories: [
@@ -14,6 +15,14 @@ const config: StorybookConfig = {
   async viteFinal(config) {
     config.plugins = config.plugins || []
     config.plugins.push(vue())
+    
+    // 添加 workspace 包解析
+    config.resolve = config.resolve || {}
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@swy/components': resolve(__dirname, '../../packages/components/src'),
+    }
+    
     return config
   },
 }

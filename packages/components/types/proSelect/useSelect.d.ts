@@ -1,0 +1,167 @@
+import { type Component, type Ref, type ComputedRef } from 'vue';
+import type { ScrollbarInstance, TooltipInstance } from 'element-plus';
+import type { AnyObject } from '../index';
+import type { ProTableInstance } from '../proTable';
+import type { ProSelectDefaultProps, ProSelectEnhanceProps, ProSelectEmits, ProOptionPublicInstance, ProOptionValue, ProSelectStates, ProSelectScrollParams } from './select.types';
+import type { ProSchemaValueEnumType } from '../proField';
+export declare const useSelect: (props: ProSelectDefaultProps, emit: ProSelectEmits, options: {
+    loading: Ref<boolean>;
+    first: Ref<boolean>;
+    resetRequest: () => void;
+    onFetch: (v?: any) => void;
+    onScroll: (v: ProSelectScrollParams) => void;
+    labelKey: ProSelectEnhanceProps["labelKey"];
+    isTableMode: ComputedRef<boolean>;
+    handleCurrentChange: (rowData: any) => void;
+    handleMultipleChange: (keys: PropertyKey[], rows: AnyObject[]) => void;
+}) => {
+    inputId: Ref<string | undefined, string | undefined>;
+    contentId: Ref<string, string>;
+    nsSelect: {
+        namespace: ComputedRef<string>;
+        b: (blockSuffix?: string) => string;
+        e: (element?: string) => string;
+        m: (modifier?: string) => string;
+        be: (blockSuffix?: string, element?: string) => string;
+        em: (element?: string, modifier?: string) => string;
+        bm: (blockSuffix?: string, modifier?: string) => string;
+        bem: (blockSuffix?: string, element?: string, modifier?: string) => string;
+        is: {
+            (name: string, state: boolean | undefined): string;
+            (name: string): string;
+        };
+        cssVar: (object: Record<string, string>) => Record<string, string>;
+        cssVarName: (name: string) => string;
+        cssVarBlock: (object: Record<string, string>) => Record<string, string>;
+        cssVarBlockName: (name: string) => string;
+    };
+    nsInput: {
+        namespace: ComputedRef<string>;
+        b: (blockSuffix?: string) => string;
+        e: (element?: string) => string;
+        m: (modifier?: string) => string;
+        be: (blockSuffix?: string, element?: string) => string;
+        em: (element?: string, modifier?: string) => string;
+        bm: (blockSuffix?: string, modifier?: string) => string;
+        bem: (blockSuffix?: string, element?: string, modifier?: string) => string;
+        is: {
+            (name: string, state: boolean | undefined): string;
+            (name: string): string;
+        };
+        cssVar: (object: Record<string, string>) => Record<string, string>;
+        cssVarName: (name: string) => string;
+        cssVarBlock: (object: Record<string, string>) => Record<string, string>;
+        cssVarBlockName: (name: string) => string;
+    };
+    states: {
+        inputValue: string;
+        options: Map<any, ProOptionPublicInstance> & Omit<Map<any, ProOptionPublicInstance>, keyof Map<any, any>>;
+        cachedOptions: Map<any, ProOptionPublicInstance> & Omit<Map<any, ProOptionPublicInstance>, keyof Map<any, any>>;
+        optionValues: any[];
+        selected: {
+            value: any;
+            currentLabel: ProOptionPublicInstance["currentLabel"];
+            isDisabled?: ProOptionPublicInstance["isDisabled"] | undefined;
+        }[];
+        hoveringIndex: number;
+        inputHovering: boolean;
+        selectionWidth: number;
+        collapseItemWidth: number;
+        previousQuery: string | null;
+        selectedLabel: string;
+        menuVisibleOnFocus: boolean;
+        isBeforeHide: boolean;
+    };
+    isFocused: Ref<boolean, boolean>;
+    expanded: Ref<boolean, boolean>;
+    optionsArray: ComputedRef<ProOptionPublicInstance[]>;
+    hoverOption: Ref<any, any>;
+    selectSize: ComputedRef<"" | "default" | "small" | "large">;
+    filteredOptionsCount: ComputedRef<number>;
+    getOptionDataList: (values?: ProSelectDefaultProps["modelValue"]) => ProSchemaValueEnumType[];
+    updateTooltip: () => void;
+    updateTagTooltip: () => void;
+    debouncedOnInputChange: import("lodash-unified").DebouncedFunc<() => void>;
+    onInput: (event: Event) => void;
+    deletePrevTag: (e: KeyboardEvent) => void;
+    deleteTag: (event: MouseEvent, tag: ProOptionPublicInstance | ProSelectStates["selected"][0]) => void;
+    deleteSelected: (event: Event) => void;
+    handleOptionSelect: (option: ProOptionPublicInstance) => void;
+    scrollToOption: (option: ProOptionPublicInstance | ProOptionPublicInstance[] | ProSelectStates["selected"]) => void;
+    hasModelValue: ComputedRef<boolean>;
+    shouldShowPlaceholder: ComputedRef<boolean>;
+    currentPlaceholder: ComputedRef<string>;
+    mouseEnterEventName: ComputedRef<string>;
+    needStatusIcon: ComputedRef<boolean>;
+    showClose: ComputedRef<boolean | undefined>;
+    iconComponent: ComputedRef<import("element-plus/es/utils/index.mjs").EpPropMergeType<(new (...args: any[]) => (string | Component) & {}) | (() => string | Component) | ((new (...args: any[]) => (string | Component) & {}) | (() => string | Component) | null)[], unknown, unknown> | undefined>;
+    iconReverse: ComputedRef<string>;
+    validateState: ComputedRef<"" | "error" | "success" | "validating">;
+    validateIcon: ComputedRef<"" | Component>;
+    showNewOption: ComputedRef<boolean | undefined>;
+    updateOptions: () => void;
+    collapseTagSize: ComputedRef<"default" | "small">;
+    setSelected: () => void;
+    selectDisabled: ComputedRef<boolean | undefined>;
+    emptyText: ComputedRef<string | null>;
+    getOption: (value: ProOptionValue, index?: number) => {
+        value: any;
+        currentLabel: any;
+        readonly isDisabled?: boolean;
+    } | {
+        value: any;
+        currentLabel: string | number | boolean;
+        readonly isDisabled: boolean;
+    };
+    handleCompositionStart: (event: CompositionEvent) => void;
+    handleCompositionUpdate: (event: CompositionEvent) => void;
+    handleCompositionEnd: (event: CompositionEvent) => void;
+    onOptionCreate: (vm: ProOptionPublicInstance) => void;
+    onOptionDestroy: (key: ProOptionValue, vm: ProOptionPublicInstance) => void;
+    handleMenuEnter: () => void;
+    focus: () => void;
+    blur: () => void;
+    handleClearClick: (event: Event) => void;
+    handleClickOutside: (event: Event) => void;
+    handleEsc: () => void;
+    toggleMenu: () => void;
+    selectOption: () => void;
+    getValueKey: (item: ProOptionPublicInstance | ProSelectStates["selected"][0]) => any;
+    navigateOptions: (direction: "prev" | "next") => void;
+    dropdownMenuVisible: import("vue").WritableComputedRef<boolean, boolean>;
+    showTagList: ComputedRef<{
+        value: any;
+        currentLabel: ProOptionPublicInstance["currentLabel"];
+        isDisabled?: ProOptionPublicInstance["isDisabled"] | undefined;
+    }[]>;
+    collapseTagList: ComputedRef<{
+        value: any;
+        currentLabel: ProOptionPublicInstance["currentLabel"];
+        isDisabled?: ProOptionPublicInstance["isDisabled"] | undefined;
+    }[]>;
+    popupScroll: (data: {
+        scrollLeft: number;
+        scrollTop: number;
+    }) => void;
+    clearValueAndReset: () => void;
+    tagStyle: ComputedRef<{
+        maxWidth: string;
+    }>;
+    collapseTagStyle: ComputedRef<{
+        maxWidth: string;
+    }>;
+    popperRef: ComputedRef<HTMLElement | undefined>;
+    inputRef: Ref<HTMLInputElement | undefined, HTMLInputElement | undefined>;
+    tooltipRef: Ref<TooltipInstance | undefined, TooltipInstance | undefined>;
+    tagTooltipRef: Ref<TooltipInstance | undefined, TooltipInstance | undefined>;
+    prefixRef: Ref<HTMLElement | undefined, HTMLElement | undefined>;
+    suffixRef: Ref<HTMLElement | undefined, HTMLElement | undefined>;
+    selectRef: Ref<HTMLElement | undefined, HTMLElement | undefined>;
+    wrapperRef: import("vue").ShallowRef<HTMLElement | undefined, HTMLElement | undefined>;
+    selectionRef: Ref<HTMLElement | undefined, HTMLElement | undefined>;
+    scrollbarRef: Ref<ScrollbarInstance | undefined, ScrollbarInstance | undefined>;
+    menuRef: Ref<HTMLElement | undefined, HTMLElement | undefined>;
+    tagMenuRef: Ref<HTMLElement | undefined, HTMLElement | undefined>;
+    collapseItemRef: Ref<HTMLElement | undefined, HTMLElement | undefined>;
+    tableRef: Ref<ProTableInstance<AnyObject> | undefined, ProTableInstance<AnyObject> | undefined>;
+};

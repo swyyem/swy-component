@@ -1,0 +1,21 @@
+export declare const UPDATE_MODEL_EVENT = "update:modelValue";
+export declare const UPDATE_OPTION = "update:option";
+export declare const CHANGE_EVENT = "change";
+export declare const INPUT_EVENT = "input";
+export declare const EVENT_CODE: {
+    tab: string;
+    enter: string;
+    space: string;
+    left: string;
+    up: string;
+    right: string;
+    down: string;
+    esc: string;
+    delete: string;
+    backspace: string;
+    numpadEnter: string;
+    pageUp: string;
+    pageDown: string;
+    home: string;
+    end: string;
+};
