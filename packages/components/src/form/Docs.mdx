@@ -1,0 +1,226 @@
+import {
+  Meta,
+  Primary,
+  Controls,
+  Canvas,
+  Story,
+  Source,
+} from '@storybook/blocks'
+import * as BasicStories from '../stories/form/basic.stories.tsx'
+
+<Meta of={BasicStories} />
+
+# ProForm
+
+基于 ElementPlus 组件库的 Form 和 FormItem 组件封装的高级 Form 组件。JSON 的配置可快速生成表单对应的项，复杂的表单项间的联动使用 ProFormField 的 `effects` 配置即可，简化了业务层的代码实现。
+
+<Primary />
+
+## Props
+
+<Controls />
+
+## Stories
+
+### 基础用法
+
+ProForm 的基本用法，推荐的 json 方式，如下方 json 渲染姓名和年龄两个表单组件，`valueType` 默认为文本框，内置了常见的表单组件，详细介绍看下方案例后的文档。
+
+若要给 valueType 对应的组件传入 props，使用 `fieldProps` 即可，如下方的 `placeholder`。
+
+`checkbox`，`radio` 和 `select` 组件的内容展示为多个，ProForm 提供了便捷统一的 `valueEnum` 属性处理，如下方的籍贯组件。部分场景 `valueEnum` 的数据是异步获取的，可使用 `request` 配置一个异步方法，该方法返回和 `valueEnum` 一样的结构即可。
+
+```javascript
+<ProForm
+  columns={[
+    {
+      label: '姓名',
+      name: 'name',
+      required: true,
+    },
+    {
+      label: '年龄',
+      valueType: 'inputNumber',
+      name: 'age',
+      required: true,
+      fieldProps: {
+        placeholder: '请输入',
+      },
+    },
+    {
+      label: '籍贯',
+      valueType: 'select',
+      name: 'region',
+      required: true,
+      valueEnum: [
+        {
+          key: '1',
+          value: '1',
+          label: '浙江',
+        },
+        {
+          key: '2',
+          value: '2',
+          label: '江西',
+        },
+      ],
+    },
+  ]}
+/>
+```
+
+<Canvas of={BasicStories.Basic} />
+
+内置的 `valueType` 类型。
+
+- text，文本框，同 ElementPlus 的 Input，valueType 的默认值
+- password，密码框，同 ElementPlus 的 Input 传入 type="password"
+- textarea，多行文本框，同 ElementPlus 的 Input 传入 type="textarea"
+- digit，数字框，同 ElementPlus 的 Input 传入 type="number"
+- autocomplete，自动补全输入框，同 ElementPlus 的 Autocomplete
+- inputNumber，数字输入框，同 ElementPlus 的 InputNumber
+- inputTag，标签输入框，同 ElementPlus 的 InputTag
+- price，价格输入框，HIS 特殊的基础业务组件，自动按千位分割
+- select，下拉框，同 ElementPlus 的 Select，根据 HIS 业务还扩展了 `checkAll` 全选配置
+- selectV2，虚拟化下拉框，同 ElementPlus 的 Virtualized Select
+- selectEnhance，下拉框，**支持下拉表格**，支持 select 的所有功能
+- checkbox，复选框组，若要单个使用，需要在 fieldProps 中传入 `{ multiple: false }`，扩展了 `checkAll` 全选配置
+- radio，单选框组，不可单独使用
+- cascader，级联选择器，同 ElementPlus 的 Cascader
+- colorPicker，颜色选择器，同 ElementPlus 的 ColorPicker
+- timePicker，时间选择器，同 ElementPlus 的 TimePicker
+- timeSelect，时间选择，同 ElementPlus 的 TimeSelect
+- datePicker，日期选择器，同 ElementPlus 的 DatePicker
+- dateTimePicker，日期选择器，同 ElementPlus 的 DatePicker 传入 type="datetime"
+- dateRangePicker，日期选择器，同 ElementPlus 的 DatePicker 传入 type="daterange"
+- dateTimeRangePicker，日期选择器，同 ElementPlus 的 DatePicker 传入 type="datetimerange"
+- table，编辑表格，具体使用看下方 table 案例
+- segmented，分段控制器，同 ElementPlus 的 Segmented
+- mention，提及，同 ElementPlus 的 Mention
+- slider，滑块，同 ElementPlus 的 Slider
+- switch，开关，同 ElementPlus 的 Switch
+
+### 布局
+
+ProForm 的布局。
+
+- 默认使用 `grid`，`colLimit` 控制一行几列，`gutter` 控制左右的间距
+- 配置 `inline`，则 `grid` 失效
+- labelWidth 和 labelPosition 同 ElementPlus 的 `form` 组件配置，传入即可
+
+form 布局还可以使用单个 json 中配置 `colProps`，同 ElementPlus 中的 `el-col` 的 props
+
+```json
+{
+  name: 'age',
+  ...,
+  colProps: {
+    span: 8
+  }
+}
+```
+
+<Story of={BasicStories.Layout} />
+
+### 联动
+
+ProForm 的表单项间的联动，使用 `effects` 配置即可实现。effects 中各字段介绍如下。
+
+- target，被改变的表单项 name
+- decorator，被改变表单项的属性，只支持 value, display, required, rules, valueEnum，其他属性修改使用 component
+- component，被改变表单组件本身的 props 修改，如 disabled。改变的属性就是放在 `fieldProps` 中的属性
+
+decorator 和 component 支持字符串表达，也支持函数，参数都是 `ctx`，包含 `$self` 和 `$target` 对应当前的表单项和目标表单项。
+
+用法以下方 effects 为例：
+
+```js
+  {
+    label: '省份',
+    valueType: 'select',
+    name: 'province',
+    required: true,
+    valueEnum: provinceEnums,
+    effects: [
+      {
+        target: 'city',
+        decorator: {
+          value: "ctx.$self.value === 'zhejiang' ? '杭州' : '南昌'",
+          display: (ctx: EffectContextType) => {
+            return ctx.$self.value === 'zhejiang' ? countryEnums : provinceEnums
+          },
+        },
+        component: {
+          disabled: "ctx.$self.value === 'zhejiang' ? true : false"
+        }
+      },
+    ],
+  },
+```
+
+<Story of={BasicStories.Effect} />
+
+### 表单的值操作
+
+ProForm 的值读写有两种方式，v-model 和 实例上的 `getFormValues` 和 `setFormValues` 方法。
+一般使用不需要获取 form 的值，form 的 `onSubmit` 方法回调中会输出 form 的值。表单项间的联动值变化推荐使用 `Effect`，比使用 v-model 更便捷。
+
+<Story of={BasicStories.Value} />
+
+### 表单嵌套表格
+
+ProForm 的表单项中嵌套表格 json 用法，使用 `valueType: 'table'`，通过fieldProps传入table组件的props，具体使用看下方 table 案例。
+
+```javascript
+ {
+    label: 'table',
+    valueType: 'table',
+    name: 'list',
+    required: true,
+    hasLabelSpace: false,
+    fieldProps: {
+      rowKey: 'id',
+      columns: [
+        {
+          prop: 'name',
+          label: '姓名',
+          required: true,
+        },
+        {
+          prop: 'age',
+          label: '年龄',
+          required: true,
+        },
+      ],
+      autoHeight: true,
+      waterfall: true,
+      editable: {
+        type: 'cell',
+      },
+    },
+  }
+```
+
+<Canvas of={BasicStories.Table} />
+
+### jsx 标签式的用法
+
+除了使用 json 的方式渲染表单，ProForm 还支持标签的方式，推荐还是用 json。标签的方式有两种实现，如下：
+
+- `ProFormField` 和 `ProField` 组件配合使用。**注意，`ProField` 上除了 `valueType`，其他属性应该加在 `ProFormField` 上**
+
+```javascript
+<ProFormField name="region" label="籍贯" :valueEnum="[...]">
+  <ProField valueType="select" />
+</ProFormField>
+```
+
+- 内部根据 `valueType` 封装了一系列的 ProFormField 和 ProField 组合的组件，如 `ProFormSelect` 等同于 `ProFormField` 和 `ProField valueType="select"` 的组合
+
+```javascript
+<ProFormSelect name="region" label="籍贯" :valueEnum="[...]">
+```
+
+<Story of={BasicStories.Tag} />
+
+关于 `ProFormSelect` 组合组件的规则介绍，和上面 `valueType` 的类型是一一对应的，如 `valueType="select"`，组件名就是 `ProFormSelect`，`valueType="inputNumber"`，组件名就是 `ProFormInputNumber`，功能用法也是一模一样的，其他就不多介绍了。

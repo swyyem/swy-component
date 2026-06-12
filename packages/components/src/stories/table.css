@@ -1,0 +1,51 @@
+.exam--desc {
+  font-size: 14px;
+}
+.exam--danger {
+  color: var(--el-color-danger);
+}
+.base-table--layout {
+  height: 600px;
+}
+
+.base-table--header {
+  padding: 16px 24px;
+  border-bottom: 1px #ddd solid;
+  margin-bottom: 0;
+}
+
+.base-table--main {
+  padding: 16px 12px 16px 24px;
+  border-right: 1px #ddd solid;
+}
+
+.base-table--side {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 24px 16px 12px;
+}
+
+.base-table--row__stopped {
+  color: #f00 !important;
+}
+
+.app .el-table .cell {
+  box-sizing: border-box;
+  line-height: 32px;
+  padding: 0 10px;
+}
+
+/* 表格布局演示样式 */
+.test-table--containerClass {
+  padding: 2px;
+  border: 1px rgb(70, 180, 231) solid;
+}
+.test-table--tableClassName {
+  background-color: #f5f5f5;
+}
+.test-table--bodyClassName {
+  border: 1px #999 solid;
+}
+.test-table--bodyMainClassName {
+  padding: 2px;
+}
