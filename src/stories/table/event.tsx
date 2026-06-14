@@ -1,6 +1,6 @@
 import { ref, nextTick, onMounted } from 'vue'
 import type { StoryObj } from '@storybook/vue3'
-import { fn } from '@storybook/test'
+import { fn } from '@vitest/spy'
 import { ElButton } from 'element-plus'
 import ProTable, { type ProTableInstance, type ProTableMenuVisibleParams } from '../../index'
 import { columns, getTableData, type RowVO } from './common'
