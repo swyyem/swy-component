@@ -3,16 +3,16 @@ import type { StorybookConfig } from '@storybook/vue3-vite';
 const config: StorybookConfig = {
   "stories": [
     "../src/**/*.mdx",
-    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../apps/docs/stories/**/*.stories.@(js|jsx|ts|tsx)"
+    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
   "addons": [
-    "@storybook/addon-docs",
-    "@storybook/addon-onboarding"
+    "@chromatic-com/storybook",
+    "@storybook/addon-vitest",
+    "@storybook/addon-a11y",
+    // "@storybook/addon-docs",
+    "@storybook/addon-onboarding",
+    "@storybook/addon-essentials", // essentials 通常已包含 actions
   ],
-  "framework": {
-    name: "@storybook/vue3-vite",
-    options: {}
-  }
+  "framework": "@storybook/vue3-vite"
 };
 export default config;

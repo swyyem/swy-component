@@ -33,28 +33,22 @@ jobs:
         with:
           ref: "main" # 指定拉取 main 分支
 
-      # 安装pnpm
-      - name: 安装 pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@9.12.2 --activate
-
       # 安装node环境
       - uses: actions/setup-node@v3
         with:
           node-version: "18"
-          cache: "pnpm"
+          cache: "npm"
 
-      # 使用pnpm安装依赖
+      # 使用npm安装依赖
       - name: 安装项目依赖
         run: |
-          pnpm config set registry https://registry.npmmirror.com/
-          pnpm install --no-frozen-lockfile
+          npm config set registry https://registry.npmmirror.com/
+          npm install
 
       # 构建组件库
       - name: 构建组件库 📦
         run: |
-          pnpm run build
+          npm run build
           # 检查构建是否成功生成了dist目录
           if [ ! -d "packages/components/dist" ]; then
             echo "错误: 组件库构建失败，未生成dist目录"
@@ -66,7 +60,7 @@ jobs:
       # 构建Storybook文档
       - name: 构建Storybook文档 📚
         run: |
-          pnpm run build-storybook
+          npm run build-storybook
           # 检查构建是否成功生成了storybook-static目录
           if [ ! -d "apps/docs/storybook-static" ]; then
             echo "错误: Storybook构建失败，未生成storybook-static目录"
@@ -91,7 +85,7 @@ jobs:
       # 运行测试
       - name: 运行测试 🧪
         run: |
-          pnpm run test:run || echo "测试失败，但不阻止部署"
+          npm run test:run || echo "测试失败，但不阻止部署"
 
       # 将Storybook文档部署到prod分支
       - name: 部署Storybook到 GitHub Pages 🚀
